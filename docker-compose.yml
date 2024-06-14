@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  induction_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: induction_server
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "9090:80"
+
+volumes:
+  db_data:
