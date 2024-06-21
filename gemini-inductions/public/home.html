@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Home</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome, <span id="username"></span>!</h1>
+    <div id="details"></div>
+    <a href="/logout">Logout</a>
+  </div>
+  <script>
+    // Fetch user details and populate the page
+    fetch('/user-details')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('username').textContent = data.username;
+        let details = document.getElementById('details');
+        if (data.role === 'core') {
+          details.innerHTML = '<h2>All Users</h2>' + generateTable(data.users);
+        } else if (data.role === 'mentor') {
+          details.innerHTML = '<h2>Your Mentees</h2>' + generateTable(data.mentees);
+        } else if (data.role === 'mentee') {
+          details.innerHTML = '<h2>Your Details</h2>' + generateTable([data.user]);
+        }
+      });
+
+    function generateTable(data) {
+      let table = '<table><tr><th>ID</th><th>Username</th><th>Role</th><th>Domain</th><th>Mentee Capacity</th></tr>';
+      data.forEach(user => {
+        table += `<tr><td>${user.id}</td><td>${user.username}</td><td>${user.role}</td><td>${user.domain}</td><td>${user.mentee_capacity}</td></tr>`;
+      });
+      table += '</table>';
+      return table;
+    }
+  </script>
+</body>
+</html>

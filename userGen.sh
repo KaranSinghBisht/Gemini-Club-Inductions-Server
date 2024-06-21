@@ -6,7 +6,7 @@ CORE_PASSWORD="Delta2024"
 
 # Core user
 sudo useradd -m -s /bin/bash "$CORE_USERNAME"
-echo "$CORE_PASSWORD" | sudo passwd --stdin "$CORE_USERNAME"
+echo "$CORE_USERNAME:$CORE_PASSWORD" | sudo chpasswd
 
 # Creating directories for mentors and mentees
 sudo mkdir -p "/home/$CORE_USERNAME/mentors" "/home/$CORE_USERNAME/mentees"
