@@ -1,30 +1,18 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  induction_server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: induction_server
-    ports:
-      - "8080:8080"
-    volumes:
-      - .:/app
-    depends_on:
-      - db
-
   db:
     image: mysql:8.0
     container_name: db
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
     ports:
       - "3307:3306"
+    networks:
+      - my-network
     volumes:
-      - db_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   phpmyadmin:
@@ -33,10 +21,23 @@ services:
     restart: always
     environment:
       PMA_HOST: db
-      PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "9090:80"
+    networks:
+      - my-network
 
-volumes:
-  db_data:
+  induction_server:
+    build:
+      context: ./gemini-inductions
+      dockerfile: Dockerfile
+    container_name: induction_server
+    restart: always
+    ports:
+      - "5000:5000"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
