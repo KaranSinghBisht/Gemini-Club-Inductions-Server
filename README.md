@@ -4,7 +4,7 @@ Welcome to the Gemini Club Inductions Server repository! This repository hosts e
 ## Setup Instructions
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/your-repo/Gemini-Club-Inductions-Server.git
+    git clone https://github.com/KaranSinghBisht/Gemini-Club-Inductions-Server.git
     cd Gemini-Club-Inductions-Server
     ```
 
